@@ -295,3 +295,4 @@ Deploy the upated workload:
 ```shell
 kubectl apply -f manifest/deployment.yaml -n todo
 ```
+<p align="center"><img src="/image/graph.png" width="40%" alt="Custom metrics" /></p>
