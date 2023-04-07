@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app-load
+  labels:
+    app.kubernetes.io/name: todo-app
+    app.kubernetes.io/instance: todo-load
+    app.kubernetes.io/component: load
+    app.kubernetes.io/version: "0.0.1"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: todo-load
+      app.kubernetes.io/instance: todo-load
+      app.kubernetes.io/component: load
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: todo-load
+        app.kubernetes.io/instance: todo-load
+        app.kubernetes.io/component: load
+    spec:
+      containers:
+        - name: todoload
+          image: hrexed/todo-otelmetrics-load:0.1
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_ADDR
+              value: "todo.IP_TO_REPLACE.nip.io"
+          resources:
+            limits:
+              memory: 120Mi
