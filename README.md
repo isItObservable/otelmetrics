@@ -92,12 +92,7 @@ chmod 777 deployment.sh
 Udpate the `instrumentation.js` located in : `src/instrumentation.js`
 Add the following lines :
 ```js
-const resource = Resource.default().merge(
-    new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: "todolist",
-      [SemanticResourceAttributes.SERVICE_VERSION]: "0.1.0",
-    })
-);
+
 const metricReader = new PeriodicExportingMetricReader({
     exporter: new OTLPMetricExporter({temporalityPreference: AggregationTemporality.DELTA}),
     exportIntervalMillis: 3000,
@@ -155,7 +150,7 @@ after :
         console.log(err);
       }
       else{
-        const label = { itemname: newItemName, 
+        const label = { 
                   list_title: listTitle
                   };
         counter_item_total.add(1,label);
@@ -181,11 +176,12 @@ we will replace :
   const listTitle = req.body.listTitle;
 
   if (listTitle === "Today") {
-  Item.deleteOne({ _id: checkboxValue }).then(
-    const label = { itemname: newItemName,
+  Item.deleteOne({ _id: checkboxValue }).then( ()=> {
+    const label = { 
                     list_title: listTitle
                 };
     counter_item_deleted_total.add(1,label);
+  }
   ).catch(function (err) {
     console.log(err);
     });
@@ -208,7 +204,7 @@ Replace the following line:
        console.log(err);
     }
     else{
-      const label = { itemname: newItemName,
+      const label = { 
           list_title: listTitle
       };
       counter_item_total.add(1,label);
@@ -224,11 +220,11 @@ by:
     }
     else{
       const elapse =Date.now() - start
-      const label = { itemname: newItemName,
+      const label = { 
           list_title: listTitle
       };
       const labeloperation = { 
-          database: todo, operation: save
+          database: 'todo', operation: 'save'
       };
       counter_item_total.add(1,label);
        mongo_operation_latency.addCallback(
@@ -246,11 +242,12 @@ and for removing item, replace:
   const listTitle = req.body.listTitle;
 
   if (listTitle === "Today") {
-  Item.deleteOne({ _id: checkboxValue }).then(
-    const label = { itemname: newItemName,
+  Item.deleteOne({ _id: checkboxValue }).then( () => {
+    const label = {
                     list_title: listTitle
                 };
     counter_item_deleted_total.add(1,label);
+    }
   ).catch(function (err) {
     console.log(err);
     });
@@ -263,13 +260,13 @@ by:
 
   if (listTitle === "Today") {
   cont start= Date.now();
-  Item.deleteOne({ _id: checkboxValue }).then(
+  Item.deleteOne({ _id: checkboxValue }).then( => {
     const elapse= Date.now() - start;
-    const label = { itemname: newItemName,
+    const label = { 
                     list_title: listTitle
                 };
     const labeloperation = { 
-          database: todo, operation: delete
+          database: 'todo', operation: 'delete'
       };
     counter_item_deleted_total.add(1,label);
     mongo_operation_latency.addCallback(
@@ -277,6 +274,7 @@ by:
                                             result.observe(elapse,labeloperation)
                                           }
                                         )
+    }
   ).catch(function (err) {
     console.log(err);
     });
